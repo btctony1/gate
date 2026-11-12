@@ -32,6 +32,7 @@ import urllib.request
 
 API_URL = "https://www.vpngate.net/api/iphone/"
 CHECK_URL = os.environ.get("CHECK_URL", "https://chk.coo.qzz.io/check")
+SSTP_URL = os.environ.get("SSTP_CHECK_URL") or CHECK_URL.replace("/check", "/sstp")
 OUT_DIR = os.environ.get("OUT_DIR", "docs")
 PAGES_BASE = os.environ.get("PAGES_BASE", "")
 
@@ -39,6 +40,7 @@ EDT_HOST = os.environ.get("EDT_HOST", "edt.coo.qzz.io")
 EDT_UUID = os.environ.get("EDT_UUID", "dee9bf42-5ecc-4e32-a49e-bd4458a08082")
 
 CANDIDATES = 60
+SSTP_CANDIDATES = 80
 MAX_NODES = 12
 MIN_OK = 3
 ACADEMIC_PREFIX = "219.100.37."  # VPNGate's own university block, not residential
@@ -107,6 +109,17 @@ def check(host, port):
         return False, 99999
 
 
+def check_sstp(host):
+    """Protocol-level SSTP probe: ok only if the server completes the
+    MS-SSTP Call Connect handshake (stronger than a raw TCP check)."""
+    url = f"{SSTP_URL}?host={urllib.parse.quote(host)}"
+    try:
+        data = json.loads(fetch(url, timeout=25).decode("utf-8", "replace"))
+        return bool(data.get("ok")), int(data.get("ms", 99999))
+    except Exception:
+        return False, 99999
+
+
 def check_many(items):
     """items: list of (server, host, port). Returns servers with check_ms set."""
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as ex:
@@ -132,16 +145,24 @@ def vless_link(s):
 
 
 def build_vless(servers):
-    ranked = sorted(servers, key=lambda x: -x["score"])
+    # Residential (volunteer) servers first so the candidate pool is not
+    # flooded by the high-score university flagships; academic ones fill in.
+    ranked = sorted(servers, key=lambda x: (x["ip"].startswith(ACADEMIC_PREFIX), -x["score"]))
     seen, items = set(), []
     for s in ranked:
         if s["ip"] in seen or not s["host_name"]:
             continue
         seen.add(s["ip"])
-        items.append((s, f"{s['host_name']}.opengw.net", 443))
-        if len(items) >= CANDIDATES:
+        items.append((s, f"{s['host_name']}.opengw.net"))
+        if len(items) >= SSTP_CANDIDATES:
             break
-    alive = check_many(items)
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as ex:
+        results = list(ex.map(lambda it: check_sstp(it[1]), items))
+    alive = []
+    for (s, _h), (ok, ms) in zip(items, results):
+        if ok:
+            s["check_ms"] = ms
+            alive.append(s)
     # residential first, then by measured latency + list ping, then speed
     alive.sort(key=lambda x: (x["ip"].startswith(ACADEMIC_PREFIX),
                               x["check_ms"] + x["ping"], -x["speed"]))
