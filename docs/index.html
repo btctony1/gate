@@ -3,39 +3,32 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VPN Gate 家宽节点</title></head><body>
 <h1>VPN Gate 家宽节点（自动更新）</h1>
-<p>更新时间：2026-11-12 20:38 UTC</p>
+<p>更新时间：2026-11-12 20:45 UTC</p>
 <h2>家宽 VLESS 节点（SSTP 链式）</h2>
-<p><a href="vless.txt">vless.txt</a> — 12 条家宽 VLESS 节点，整段复制到 v2rayNG 从剪贴板导入，或作为订阅地址添加。流量经 CF 入口后由 VPN Gate 家宽服务器出站。</p>
+<p><a href="vless.txt">vless.txt</a> — 5 条家宽 VLESS 节点，整段复制到 v2rayNG 从剪贴板导入，或作为订阅地址添加。流量经 CF 入口后由 VPN Gate 家宽服务器出站。</p>
 <table border="1" cellspacing="0" cellpadding="6">
 <tr><th>#</th><th>国家</th><th>家宽服务器（SSTP）</th><th>速度</th><th>列表Ping</th><th>实测</th></tr>
-<tr><td>1</td><td>RO Romania</td><td>opengw.opengw.net</td><td>430.7 Mbps</td><td>4 ms</td><td>108 ms</td></tr>
-<tr><td>2</td><td>JP Japan</td><td>laud.opengw.net</td><td>29.1 Mbps</td><td>14 ms</td><td>116 ms</td></tr>
-<tr><td>3</td><td>JP Japan</td><td>vpn982001769.opengw.net</td><td>58.8 Mbps</td><td>23 ms</td><td>322 ms</td></tr>
-<tr><td>4</td><td>JP Japan</td><td>public-vpn-231.opengw.net</td><td>160.2 Mbps</td><td>9 ms</td><td>113 ms</td></tr>
-<tr><td>5</td><td>JP Japan</td><td>public-vpn-84.opengw.net</td><td>152.1 Mbps</td><td>11 ms</td><td>88 ms</td></tr>
-<tr><td>6</td><td>JP Japan</td><td>public-vpn-225.opengw.net</td><td>109.3 Mbps</td><td>9 ms</td><td>113 ms</td></tr>
-<tr><td>7</td><td>JP Japan</td><td>public-vpn-46.opengw.net</td><td>235.6 Mbps</td><td>19 ms</td><td>108 ms</td></tr>
-<tr><td>8</td><td>JP Japan</td><td>public-vpn-85.opengw.net</td><td>335.0 Mbps</td><td>23 ms</td><td>89 ms</td></tr>
-<tr><td>9</td><td>JP Japan</td><td>public-vpn-49.opengw.net</td><td>119.1 Mbps</td><td>14 ms</td><td>89 ms</td></tr>
-<tr><td>10</td><td>JP Japan</td><td>public-vpn-55.opengw.net</td><td>207.1 Mbps</td><td>14 ms</td><td>109 ms</td></tr>
-<tr><td>11</td><td>JP Japan</td><td>public-vpn-205.opengw.net</td><td>169.1 Mbps</td><td>22 ms</td><td>114 ms</td></tr>
-<tr><td>12</td><td>JP Japan</td><td>public-vpn-198.opengw.net</td><td>482.7 Mbps</td><td>25 ms</td><td>114 ms</td></tr>
+<tr><td>1</td><td>JP Japan</td><td>laud.opengw.net</td><td>50.4 Mbps</td><td>14 ms</td><td>170 ms</td></tr>
+<tr><td>2</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn132328711.opengw.net</td><td>210.7 Mbps</td><td>1 ms</td><td>869 ms</td></tr>
+<tr><td>3</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn430861125.opengw.net</td><td>198.4 Mbps</td><td>1 ms</td><td>927 ms</td></tr>
+<tr><td>4</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn178522347.opengw.net</td><td>219.7 Mbps</td><td>1 ms</td><td>988 ms</td></tr>
+<tr><td>5</td><td>RO Romania</td><td>opengw.opengw.net</td><td>430.7 Mbps</td><td>4 ms</td><td>154 ms</td></tr>
 </table>
 <h2>OpenVPN 节点</h2>
 <p>直连 = OpenVPN 应用直接导入；链式 = 先在本机开着 VLESS 客户端（SOCKS 10808）再导入链式配置。</p>
 <table border="1" cellspacing="0" cellpadding="6">
 <tr><th>#</th><th>国家</th><th>服务器</th><th>速度</th><th>列表Ping</th><th>实测</th><th>配置</th></tr>
-<tr><td>1</td><td>JP Japan</td><td>219.100.37.29</td><td>152.1 Mbps</td><td>11 ms</td><td>88 ms</td><td><a href="ovpn/01-JP-219.100.37.29.ovpn">直连</a> · <a href="ovpn-chain/01-JP-219.100.37.29.ovpn">链式</a></td></tr>
-<tr><td>2</td><td>JP Japan</td><td>219.100.37.15</td><td>119.1 Mbps</td><td>14 ms</td><td>89 ms</td><td><a href="ovpn/02-JP-219.100.37.15.ovpn">直连</a> · <a href="ovpn-chain/02-JP-219.100.37.15.ovpn">链式</a></td></tr>
-<tr><td>3</td><td>JP Japan</td><td>160.86.46.9</td><td>898.7 Mbps</td><td>6 ms</td><td>103 ms</td><td><a href="ovpn/03-JP-160.86.46.9.ovpn">直连</a> · <a href="ovpn-chain/03-JP-160.86.46.9.ovpn">链式</a></td></tr>
-<tr><td>4</td><td>RO Romania</td><td>217.138.212.62</td><td>430.7 Mbps</td><td>4 ms</td><td>108 ms</td><td><a href="ovpn/04-RO-217.138.212.62.ovpn">直连</a> · <a href="ovpn-chain/04-RO-217.138.212.62.ovpn">链式</a></td></tr>
-<tr><td>5</td><td>JP Japan</td><td>219.100.37.81</td><td>335.0 Mbps</td><td>23 ms</td><td>89 ms</td><td><a href="ovpn/05-JP-219.100.37.81.ovpn">直连</a> · <a href="ovpn-chain/05-JP-219.100.37.81.ovpn">链式</a></td></tr>
-<tr><td>6</td><td>JP Japan</td><td>27.138.10.139</td><td>264.5 Mbps</td><td>15 ms</td><td>97 ms</td><td><a href="ovpn/06-JP-27.138.10.139.ovpn">直连</a> · <a href="ovpn-chain/06-JP-27.138.10.139.ovpn">链式</a></td></tr>
-<tr><td>7</td><td>JP Japan</td><td>219.100.37.115</td><td>239.7 Mbps</td><td>26 ms</td><td>89 ms</td><td><a href="ovpn/07-JP-219.100.37.115.ovpn">直连</a> · <a href="ovpn-chain/07-JP-219.100.37.115.ovpn">链式</a></td></tr>
-<tr><td>8</td><td>JP Japan</td><td>219.100.37.164</td><td>245.4 Mbps</td><td>10 ms</td><td>109 ms</td><td><a href="ovpn/08-JP-219.100.37.164.ovpn">直连</a> · <a href="ovpn-chain/08-JP-219.100.37.164.ovpn">链式</a></td></tr>
-<tr><td>9</td><td>JP Japan</td><td>58.188.239.61</td><td>439.4 Mbps</td><td>2 ms</td><td>119 ms</td><td><a href="ovpn/09-JP-58.188.239.61.ovpn">直连</a> · <a href="ovpn-chain/09-JP-58.188.239.61.ovpn">链式</a></td></tr>
-<tr><td>10</td><td>JP Japan</td><td>61.25.149.161</td><td>84.9 Mbps</td><td>16 ms</td><td>105 ms</td><td><a href="ovpn/10-JP-61.25.149.161.ovpn">直连</a> · <a href="ovpn-chain/10-JP-61.25.149.161.ovpn">链式</a></td></tr>
-<tr><td>11</td><td>JP Japan</td><td>219.100.37.188</td><td>160.2 Mbps</td><td>9 ms</td><td>113 ms</td><td><a href="ovpn/11-JP-219.100.37.188.ovpn">直连</a> · <a href="ovpn-chain/11-JP-219.100.37.188.ovpn">链式</a></td></tr>
-<tr><td>12</td><td>JP Japan</td><td>219.100.37.219</td><td>109.3 Mbps</td><td>9 ms</td><td>113 ms</td><td><a href="ovpn/12-JP-219.100.37.219.ovpn">直连</a> · <a href="ovpn-chain/12-JP-219.100.37.219.ovpn">链式</a></td></tr>
+<tr><td>1</td><td>CA Canada</td><td>70.79.233.9</td><td>143.8 Mbps</td><td>23 ms</td><td>70 ms</td><td><a href="ovpn/01-CA-70.79.233.9.ovpn">直连</a> · <a href="ovpn-chain/01-CA-70.79.233.9.ovpn">链式</a></td></tr>
+<tr><td>2</td><td>RU Russian Federation</td><td>213.110.206.3</td><td>18.7 Mbps</td><td>13 ms</td><td>117 ms</td><td><a href="ovpn/02-RU-213.110.206.3.ovpn">直连</a> · <a href="ovpn-chain/02-RU-213.110.206.3.ovpn">链式</a></td></tr>
+<tr><td>3</td><td>RO Romania</td><td>217.138.212.62</td><td>430.7 Mbps</td><td>4 ms</td><td>154 ms</td><td><a href="ovpn/03-RO-217.138.212.62.ovpn">直连</a> · <a href="ovpn-chain/03-RO-217.138.212.62.ovpn">链式</a></td></tr>
+<tr><td>4</td><td>JP Japan</td><td>219.100.37.199</td><td>194.2 Mbps</td><td>8 ms</td><td>153 ms</td><td><a href="ovpn/04-JP-219.100.37.199.ovpn">直连</a> · <a href="ovpn-chain/04-JP-219.100.37.199.ovpn">链式</a></td></tr>
+<tr><td>5</td><td>JP Japan</td><td>219.100.37.207</td><td>136.2 Mbps</td><td>8 ms</td><td>154 ms</td><td><a href="ovpn/05-JP-219.100.37.207.ovpn">直连</a> · <a href="ovpn-chain/05-JP-219.100.37.207.ovpn">链式</a></td></tr>
+<tr><td>6</td><td>JP Japan</td><td>219.100.37.161</td><td>219.1 Mbps</td><td>8 ms</td><td>155 ms</td><td><a href="ovpn/06-JP-219.100.37.161.ovpn">直连</a> · <a href="ovpn-chain/06-JP-219.100.37.161.ovpn">链式</a></td></tr>
+<tr><td>7</td><td>JP Japan</td><td>219.100.37.206</td><td>140.3 Mbps</td><td>12 ms</td><td>153 ms</td><td><a href="ovpn/07-JP-219.100.37.206.ovpn">直连</a> · <a href="ovpn-chain/07-JP-219.100.37.206.ovpn">链式</a></td></tr>
+<tr><td>8</td><td>JP Japan</td><td>219.100.37.24</td><td>180.0 Mbps</td><td>14 ms</td><td>154 ms</td><td><a href="ovpn/08-JP-219.100.37.24.ovpn">直连</a> · <a href="ovpn-chain/08-JP-219.100.37.24.ovpn">链式</a></td></tr>
+<tr><td>9</td><td>JP Japan</td><td>106.156.229.156</td><td>754.1 Mbps</td><td>10 ms</td><td>161 ms</td><td><a href="ovpn/09-JP-106.156.229.156.ovpn">直连</a> · <a href="ovpn-chain/09-JP-106.156.229.156.ovpn">链式</a></td></tr>
+<tr><td>10</td><td>JP Japan</td><td>219.100.37.192</td><td>220.3 Mbps</td><td>19 ms</td><td>152 ms</td><td><a href="ovpn/10-JP-219.100.37.192.ovpn">直连</a> · <a href="ovpn-chain/10-JP-219.100.37.192.ovpn">链式</a></td></tr>
+<tr><td>11</td><td>JP Japan</td><td>219.100.37.83</td><td>300.7 Mbps</td><td>9 ms</td><td>163 ms</td><td><a href="ovpn/11-JP-219.100.37.83.ovpn">直连</a> · <a href="ovpn-chain/11-JP-219.100.37.83.ovpn">链式</a></td></tr>
+<tr><td>12</td><td>JP Japan</td><td>219.100.37.166</td><td>228.8 Mbps</td><td>22 ms</td><td>153 ms</td><td><a href="ovpn/12-JP-219.100.37.166.ovpn">直连</a> · <a href="ovpn-chain/12-JP-219.100.37.166.ovpn">链式</a></td></tr>
 </table>
 </body></html>
