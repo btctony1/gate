@@ -251,8 +251,11 @@ def chain_exit_ip(sstp_host, echo_host, echo_path, deadline_s=35):
             + f"GET {echo_path} HTTP/1.0\r\nHost: {echo_host}\r\n\r\n".encode()
         )
         _ws_send(sock, payload)
-        return _read_frames(sock, rest, time.time() + deadline_s)
-    except Exception:
+        ip = _read_frames(sock, rest, time.time() + deadline_s)
+        print(f"chain {sstp_host} via {echo_host}: {'exit ' + ip if ip else 'no response'}", flush=True)
+        return ip
+    except Exception as e:
+        print(f"chain {sstp_host} via {echo_host}: error {type(e).__name__} {str(e)[:80]}", flush=True)
         return None
     finally:
         if sock is not None:
@@ -340,7 +343,8 @@ def build_vless(servers):
             probed.append(s)
     probed.sort(key=lambda x: x["check_ms"])
     probed = probed[:CHAIN_TEST_CAP]
-    print(f"vless stage b: {len(probed)} passed SSTP probe", flush=True)
+    print(f"vless stage b: {len(probed)} passed SSTP probe: "
+          + ", ".join(s["host_name"] for s in probed), flush=True)
     # Stage (c): full-chain verification — real traffic, real exit IP.
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
         oks = list(ex.map(verify_chain, probed))
