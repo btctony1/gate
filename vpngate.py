@@ -399,19 +399,21 @@ def main():
     os.makedirs(os.path.join(tmp, "ovpn"))
     os.makedirs(os.path.join(tmp, "ovpn-chain"))
 
-    if vless_nodes:
-        with open(os.path.join(tmp, "vless.txt"), "w") as fh:
-            fh.write("\n".join(vless_link(s) for s in vless_nodes) + "\n")
-        details = [{
-            "remark": f"{s['cc']}-jiakuan-{s['host_name']}",
-            "sstp_host": f"{s['host_name']}.opengw.net",
-            "country": s["country"],
-            "exit_ip": s["exit_ip"],
-            "exit_isp": s.get("exit_isp", ""),
-            "chain_ms": s["chain_ms"],
-        } for s in vless_nodes]
-        with open(os.path.join(tmp, "vless.json"), "w") as fh:
-            json.dump(details, fh, ensure_ascii=False, indent=1)
+    # Always publish the current verification result for the VLESS line —
+    # an empty list when nothing passed. Keeping a stale list would present
+    # unverified (possibly non-residential) nodes as current.
+    with open(os.path.join(tmp, "vless.txt"), "w") as fh:
+        fh.write("\n".join(vless_link(s) for s in vless_nodes) + ("\n" if vless_nodes else ""))
+    details = [{
+        "remark": f"{s['cc']}-jiakuan-{s['host_name']}",
+        "sstp_host": f"{s['host_name']}.opengw.net",
+        "country": s["country"],
+        "exit_ip": s["exit_ip"],
+        "exit_isp": s.get("exit_isp", ""),
+        "chain_ms": s["chain_ms"],
+    } for s in vless_nodes]
+    with open(os.path.join(tmp, "vless.json"), "w") as fh:
+        json.dump(details, fh, ensure_ascii=False, indent=1)
 
     rows_v, rows_o, hosts_lines, sub_lines = [], [], [], []
     for i, s in enumerate(vless_nodes, 1):
@@ -454,7 +456,8 @@ def main():
                       "每条都经过全链路实测：真实流量经 CF 入口 + SSTP 链到该服务器出网，"
                       "下表出口 IP 为实测值且已核为住宅运营商（非机房/非学术网）。</p>")
     else:
-        vless_note = ("<p>本轮没有节点通过全链路住宅出口验证，vless.txt 保留上一版。</p>")
+        vless_note = ("<p>本轮没有节点通过全链路住宅出口验证，vless.txt 为空；"
+                      "系统每 30 分钟自动重新筛选，出现合格节点会自动发布。</p>")
     page = """<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
