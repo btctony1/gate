@@ -22,7 +22,15 @@ Fetches the official VPN Gate server list and publishes:
    subscription; the list is replaced as soon as a round verifies anew.
 
 2. OpenVPN configs (secondary): TCP-mode servers tested through the check
-   worker, published as direct and local-SOCKS chained configs.
+   worker, published as direct and local-SOCKS chained configs. On top of
+   that, an exit-verification stage (v5) actually connects to a diverse
+   subset of the reachable servers with a real OpenVPN client on the
+   runner, measures the exit IP through the tunnel, and publishes the
+   residential-classified ones separately (docs/ovpn-verified/,
+   docs/ovpn-verified-chain/, docs/ovpn.json) with the same
+   keep-last-good policy as the VLESS line. The stage is fail-soft: if
+   openvpn or /dev/net/tun is unavailable on the runner it logs the fact
+   and the run continues with reachability-only publishing.
 
 Runs on GitHub Actions every 30 minutes. If a line produces too few nodes,
 its previous published output is left untouched.
@@ -32,11 +40,13 @@ import concurrent.futures
 import html
 import json
 import os
+import queue
 import re
 import shutil
 import socket
 import ssl
 import struct
+import subprocess
 import sys
 import tempfile
 import time
@@ -56,8 +66,16 @@ EDT_UUID = os.environ.get("EDT_UUID", "dee9bf42-5ecc-4e32-a49e-bd4458a08082")
 CANDIDATES = 60            # OpenVPN line
 SSTP_CANDIDATES = 150      # VLESS stage-1 pool (volunteer servers)
 CHAIN_TEST_CAP = 48        # max full-chain verifications per run
+OVPN_VERIFY_CAP = 24       # max OpenVPN exit verifications per run
+OVPN_VERIFY_SLOTS = 3      # parallel OpenVPN tunnels while exit-testing
+OVPN_TUN_TIMEOUT_S = 40    # deadline for a tunnel to come up
 MAX_NODES = 12
 MIN_OK = 3                 # OpenVPN line keep-previous threshold
+CHAIN_TRAILER = (
+    "\n# chained: OpenVPN reaches its server through the local SOCKS proxy\n"
+    "# exposed by the VLESS client running the edgetunnel entry node.\n"
+    "socks-proxy 127.0.0.1 10808\n"
+)
 ACADEMIC_PREFIX = "219.100.37."  # VPNGate's own university block, not residential
 UA = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"}
 IP_RE = re.compile(r"^\d{1,3}(?:\.\d{1,3}){3}$")
@@ -394,7 +412,181 @@ def build_ovpn(servers):
             break
     alive = check_many(items)
     alive.sort(key=lambda x: (x["check_ms"] + x["ping"], -x["speed"]))
-    return alive[:MAX_NODES]
+    return alive
+
+
+# ---------------------------------------------------------------------------
+# OpenVPN exit verification (v5): connect to reachable servers with a real
+# OpenVPN client on this machine, measure the exit IP through the tunnel,
+# and keep only the exits that classify as residential. Fail-soft by
+# design — any systemic problem (no openvpn binary, no TUN device) logs a
+# clear line and the caller falls back to reachability-only publishing.
+# ---------------------------------------------------------------------------
+
+def _diverse_pick(alive, cap):
+    """Round-robin across countries so the exit-test pool is not all
+    servers from the single biggest country."""
+    groups, order = {}, []
+    for s in alive:
+        cc = s["cc"]
+        if cc not in groups:
+            groups[cc] = []
+            order.append(cc)
+        groups[cc].append(s)
+    picks, idx = [], 0
+    while len(picks) < cap:
+        progressed = False
+        for cc in order:
+            if idx < len(groups[cc]):
+                picks.append(groups[cc][idx])
+                progressed = True
+                if len(picks) >= cap:
+                    break
+        if not progressed:
+            break
+        idx += 1
+    return picks
+
+
+def _read_pid(pid_path):
+    try:
+        with open(pid_path) as fh:
+            return int(fh.read().strip())
+    except Exception:
+        return None
+
+
+def _pid_alive(pid):
+    try:
+        os.kill(pid, 0)
+        return True
+    except PermissionError:
+        return True
+    except OSError:
+        return False
+
+
+def _ovpn_exit_test(s, slot, workdir):
+    """One tunnel attempt. Records exit_ip/ovpn_ms on success."""
+    dev = f"tun{10 + slot}"
+    cfg_path = os.path.join(workdir, "c.ovpn")
+    log_path = os.path.join(workdir, "openvpn.log")
+    pid_path = os.path.join(workdir, "openvpn.pid")
+    with open(cfg_path, "w") as fh:
+        fh.write(s["config"])
+    started = time.time()
+    try:
+        subprocess.run(["sudo", "openvpn", "--config", cfg_path, "--dev", dev,
+                        "--route-nopull", "--daemon", "--log", log_path,
+                        "--writepid", pid_path],
+                       timeout=20, capture_output=True, text=True)
+    except Exception as e:
+        print(f"ovpn verify {s['remote_host']}: start error "
+              f"{type(e).__name__} {str(e)[:80]}", flush=True)
+        return False
+    up = False
+    deadline = time.time() + OVPN_TUN_TIMEOUT_S
+    while time.time() < deadline:
+        try:
+            with open(log_path, "rb") as fh:
+                if b"Initialization Sequence Completed" in fh.read():
+                    up = True
+                    break
+        except OSError:
+            pass
+        pid = _read_pid(pid_path)
+        if pid and not _pid_alive(pid):
+            break  # daemon already exited; fail fast
+        time.sleep(1.5)
+    ip = None
+    if up:
+        for echo in ("http://ifconfig.me/ip", "http://icanhazip.com"):
+            try:
+                r = subprocess.run(["curl", "--interface", dev, "-s", "-m", "15", echo],
+                                   timeout=25, capture_output=True, text=True)
+                tok = (r.stdout or "").strip().split()
+                tok = tok[0] if tok else ""
+                if IP_RE.match(tok):
+                    ip = tok
+                    break
+            except Exception:
+                continue
+    pid = _read_pid(pid_path)
+    if pid:
+        try:
+            subprocess.run(["sudo", "kill", str(pid)], timeout=10, capture_output=True)
+            for _ in range(10):
+                if not _pid_alive(pid):
+                    break
+                time.sleep(0.5)
+            if _pid_alive(pid):
+                subprocess.run(["sudo", "kill", "-9", str(pid)],
+                               timeout=10, capture_output=True)
+        except Exception:
+            pass
+    if ip:
+        s["exit_ip"] = ip
+        s["ovpn_ms"] = int((time.time() - started) * 1000)
+        print(f"ovpn verify {s['remote_host']}: tunnel up, exit {ip}", flush=True)
+        return True
+    print(f"ovpn verify {s['remote_host']}: "
+          f"{'tunnel up but no exit IP measured' if up else 'tunnel did not come up'}",
+          flush=True)
+    return False
+
+
+def verify_ovpn_exits(alive):
+    """Exit-test a country-diverse subset of the reachable servers.
+    Returns the verified residential servers (possibly empty)."""
+    if not alive:
+        return []
+    if not shutil.which("openvpn"):
+        print("ovpn verify: openvpn binary not found; "
+              "skipping exit verification (fallback: reachability only)", flush=True)
+        return []
+    if not os.path.exists("/dev/net/tun"):
+        print("ovpn verify: /dev/net/tun unavailable; "
+              "skipping exit verification (fallback: reachability only)", flush=True)
+        return []
+    picks = _diverse_pick(alive, OVPN_VERIFY_CAP)
+    print(f"ovpn verify: exit-testing {len(picks)} candidates "
+          f"({len(alive)} reachable)", flush=True)
+    workroot = tempfile.mkdtemp(prefix="gate-ovpn-")
+    slots = queue.Queue()
+    for i in range(OVPN_VERIFY_SLOTS):
+        slots.put(i)
+
+    def run_one(s):
+        slot = slots.get()
+        try:
+            wd = os.path.join(workroot, f"s{slot}-{s['remote_host']}")
+            os.makedirs(wd, exist_ok=True)
+            return _ovpn_exit_test(s, slot, wd)
+        except Exception as e:
+            print(f"ovpn verify {s.get('remote_host')}: error "
+                  f"{type(e).__name__} {str(e)[:80]}", flush=True)
+            return False
+        finally:
+            slots.put(slot)
+
+    try:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=OVPN_VERIFY_SLOTS) as ex:
+            oks = list(ex.map(run_one, picks))
+    finally:
+        shutil.rmtree(workroot, ignore_errors=True)
+    tested = [s for s, ok in zip(picks, oks) if ok]
+    print(f"ovpn verify: {len(tested)} of {len(picks)} tunnels measured an exit IP",
+          flush=True)
+    good = classify_exits([s["exit_ip"] for s in tested])
+    verified = []
+    for s in tested:
+        info = good.get(s["exit_ip"])
+        if info:
+            s["exit_isp"] = info["isp"] or info["org"]
+            verified.append(s)
+    verified.sort(key=lambda x: x.get("ovpn_ms", 999999999))
+    print(f"ovpn verify: {len(verified)} verified residential exits", flush=True)
+    return verified[:MAX_NODES]
 
 
 def main():
@@ -403,11 +595,21 @@ def main():
     print(f"{len(servers)} servers in list", flush=True)
 
     vless_nodes = build_vless(servers)
-    ovpn_nodes = build_ovpn(servers)
+    ovpn_all = build_ovpn(servers)
+    ovpn_nodes = ovpn_all[:MAX_NODES]
     print(f"ovpn: {len(ovpn_nodes)} TCP nodes passed", flush=True)
     if not vless_nodes and len(ovpn_nodes) < MIN_OK:
         print("nothing publishable on either line; keeping previous output", flush=True)
         return 0
+
+    # OpenVPN exit verification (v5). Fail-soft: any failure here leaves
+    # ovpn_verified empty and the run publishes exactly what v4 did.
+    try:
+        ovpn_verified = verify_ovpn_exits(ovpn_all)
+    except Exception as e:
+        print(f"ovpn verify: stage error {type(e).__name__} {str(e)[:100]}; "
+              "continuing without exit verification", flush=True)
+        ovpn_verified = []
 
     tmp = tempfile.mkdtemp(prefix="gate-out-")
     os.makedirs(os.path.join(tmp, "ovpn"))
@@ -442,7 +644,41 @@ def main():
         with open(os.path.join(tmp, "vless.json"), "w") as fh:
             json.dump(details, fh, ensure_ascii=False, indent=1)
 
-    rows_v, rows_o, hosts_lines, sub_lines = [], [], [], []
+    # Same availability-first policy for the exit-verified OpenVPN set:
+    # publish this round's verified configs, or keep the previous set
+    # untouched when this round verified none.
+    prev_ovpn = []
+    if not ovpn_verified:
+        try:
+            with open(os.path.join(OUT_DIR, "ovpn.json")) as fh:
+                prev_ovpn = json.load(fh)
+        except Exception:
+            prev_ovpn = []
+    keep_prev_ovpn = not ovpn_verified and bool(prev_ovpn)
+    if ovpn_verified or not keep_prev_ovpn:
+        os.makedirs(os.path.join(tmp, "ovpn-verified"))
+        os.makedirs(os.path.join(tmp, "ovpn-verified-chain"))
+        odetails = []
+        for i, s in enumerate(ovpn_verified, 1):
+            name = f"{i:02d}-{s['cc']}-{s['remote_host']}.ovpn"
+            with open(os.path.join(tmp, "ovpn-verified", name), "w") as fh:
+                fh.write(s["config"])
+            with open(os.path.join(tmp, "ovpn-verified-chain", name), "w") as fh:
+                fh.write(s["config"].rstrip() + CHAIN_TRAILER)
+            odetails.append({
+                "remark": f"{s['cc']}-jiakuan-{s['remote_host']}",
+                "remote_host": s["remote_host"],
+                "remote_port": s["remote_port"],
+                "country": s["country"],
+                "exit_ip": s["exit_ip"],
+                "exit_isp": s.get("exit_isp", ""),
+                "verified_at": verified_at,
+                "file": name,
+            })
+        with open(os.path.join(tmp, "ovpn.json"), "w") as fh:
+            json.dump(odetails, fh, ensure_ascii=False, indent=1)
+
+    rows_v, rows_o, rows_ov, hosts_lines, sub_lines = [], [], [], [], []
     for i, s in enumerate(vless_nodes, 1):
         rows_v.append(
             "<tr><td>{i}</td><td>{cc} {country}</td><td>{host}</td>"
@@ -461,17 +697,35 @@ def main():
                     exit_ip=html.escape(d.get("exit_ip", "")),
                     isp=html.escape(d.get("exit_isp", "")),
                     cms=d.get("chain_ms", "")))
+    for i, s in enumerate(ovpn_verified, 1):
+        name = f"{i:02d}-{s['cc']}-{s['remote_host']}.ovpn"
+        rows_ov.append(
+            "<tr><td>{i}</td><td>{cc} {country}</td><td>{host}</td>"
+            "<td>{exit_ip}</td><td>{isp}</td>"
+            "<td><a href=\"ovpn-verified/{name}\">直连</a> · "
+            "<a href=\"ovpn-verified-chain/{name}\">链式</a></td></tr>".format(
+                i=i, cc=html.escape(s["cc"]), country=html.escape(s["country"]),
+                host=html.escape(s["remote_host"]),
+                exit_ip=html.escape(s["exit_ip"]), isp=html.escape(s.get("exit_isp", "")),
+                name=name))
+    if keep_prev_ovpn:
+        for i, d in enumerate(prev_ovpn, 1):
+            rows_ov.append(
+                "<tr><td>{i}</td><td>{country}</td><td>{host}</td>"
+                "<td>{exit_ip}</td><td>{isp}</td>"
+                "<td><a href=\"ovpn-verified/{name}\">直连</a> · "
+                "<a href=\"ovpn-verified-chain/{name}\">链式</a></td></tr>".format(
+                    i=i, country=html.escape(d.get("country", "")),
+                    host=html.escape(d.get("remote_host", "")),
+                    exit_ip=html.escape(d.get("exit_ip", "")),
+                    isp=html.escape(d.get("exit_isp", "")),
+                    name=html.escape(d.get("file", ""))))
     for i, s in enumerate(ovpn_nodes, 1):
         name = f"{i:02d}-{s['cc']}-{s['remote_host']}.ovpn"
         with open(os.path.join(tmp, "ovpn", name), "w") as fh:
             fh.write(s["config"])
-        chained = s["config"].rstrip() + (
-            "\n# chained: OpenVPN reaches its server through the local SOCKS proxy\n"
-            "# exposed by the VLESS client running the edgetunnel entry node.\n"
-            "socks-proxy 127.0.0.1 10808\n"
-        )
         with open(os.path.join(tmp, "ovpn-chain", name), "w") as fh:
-            fh.write(chained)
+            fh.write(s["config"].rstrip() + CHAIN_TRAILER)
         hosts_lines.append(f"{s['remote_host']}:{s['remote_port']}")
         if PAGES_BASE:
             sub_lines.append(f"{PAGES_BASE}/ovpn-chain/{name}")
@@ -501,6 +755,19 @@ def main():
     else:
         vless_note = ("<p>本轮没有节点通过全链路住宅出口验证，vless.txt 为空；"
                       "系统每 30 分钟自动重新筛选，出现合格节点会自动发布。</p>")
+    if ovpn_verified:
+        ovpn_v_note = (f"<p>{len(ovpn_verified)} 条 OpenVPN 配置经过真实隧道出口实测："
+                       "检测机实际连上该服务器后从隧道内测得出口 IP，"
+                       "下表出口 IP 为实测值且已核为住宅运营商（非机房/非学术网）。</p>")
+    elif keep_prev_ovpn:
+        prev_at_o = max((d.get("verified_at", "") for d in prev_ovpn), default="")
+        ovpn_v_note = (f"<p>本轮没有新的 OpenVPN 节点通过出口实测；下表为上次实测通过的 "
+                       f"{len(prev_ovpn)} 条配置（验证时间："
+                       f"{html.escape(prev_at_o or '较早')}），可能已部分失效；"
+                       "系统会继续自动筛选，验出新的后自动替换。</p>")
+    else:
+        ovpn_v_note = ("<p>本轮没有 OpenVPN 节点通过出口实测；下方普通 OpenVPN 列表"
+                       "只做过连通性测试，未验出口。</p>")
     page = """<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -513,14 +780,22 @@ def main():
 <tr><th>#</th><th>国家</th><th>家宽服务器（SSTP）</th><th>实测出口 IP</th><th>出口运营商</th><th>链路耗时</th></tr>
 {rows_v}
 </table>
-<h2>OpenVPN 节点</h2>
+<h2>OpenVPN 家宽节点（出口实测）</h2>
+{ovpn_v_note}
+<table border="1" cellspacing="0" cellpadding="6">
+<tr><th>#</th><th>国家</th><th>服务器</th><th>实测出口 IP</th><th>出口运营商</th><th>配置</th></tr>
+{rows_ov}
+</table>
+<h2>OpenVPN 节点（仅连通性测试）</h2>
 <p>直连 = OpenVPN 应用直接导入；链式 = 先在本机开着 VLESS 客户端（SOCKS 10808）再导入链式配置。</p>
 <table border="1" cellspacing="0" cellpadding="6">
 <tr><th>#</th><th>国家</th><th>服务器</th><th>速度</th><th>列表Ping</th><th>实测</th><th>配置</th></tr>
 {rows_o}
 </table>
 </body></html>
-""".format(now=now, vless_note=vless_note, rows_v="\n".join(rows_v), rows_o="\n".join(rows_o))
+""".format(now=now, vless_note=vless_note, rows_v="\n".join(rows_v),
+           ovpn_v_note=ovpn_v_note, rows_ov="\n".join(rows_ov),
+           rows_o="\n".join(rows_o))
     with open(os.path.join(tmp, "index.html"), "w") as fh:
         fh.write(page)
 
@@ -534,7 +809,8 @@ def main():
         else:
             shutil.copy2(src, dst)
     shutil.rmtree(tmp, ignore_errors=True)
-    print(f"published vless={len(vless_nodes)} ovpn={len(ovpn_nodes)} to {OUT_DIR}", flush=True)
+    print(f"published vless={len(vless_nodes)} ovpn={len(ovpn_nodes)} "
+          f"ovpn_verified={len(ovpn_verified)} to {OUT_DIR}", flush=True)
     return 0
 
 
