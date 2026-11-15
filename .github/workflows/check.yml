@@ -22,6 +22,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install OpenVPN for exit verification
+        run: sudo apt-get update && sudo apt-get install -y openvpn
+
       - name: Generate node list
         env:
           CHECK_URL: https://chk.coo.qzz.io/check
