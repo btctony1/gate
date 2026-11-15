@@ -13,8 +13,13 @@ Fetches the official VPN Gate server list and publishes:
         edgetunnel entry with the node's sstp path parameter to an IP-echo
         service; the node is published ONLY if real traffic comes back and
         the observed exit IP classifies as residential (ip-api: not
-        hosting, not SoftEther, not the academic block).
-   Output: docs/vless.txt + docs/vless.json (with exit IP / ISP evidence).
+        hosting, not SoftEther, not the academic block). PPP completion is
+        a per-attempt lottery, so each candidate gets one retry per run.
+   Output: docs/vless.txt + docs/vless.json (with exit IP / ISP evidence
+   and a per-node verified_at timestamp). Availability policy: a round
+   that verifies nothing keeps the previous verified list (labelled with
+   its original verification time on the page) instead of blanking the
+   subscription; the list is replaced as soon as a round verifies anew.
 
 2. OpenVPN configs (secondary): TCP-mode servers tested through the check
    worker, published as direct and local-SOCKS chained configs.
@@ -50,7 +55,7 @@ EDT_UUID = os.environ.get("EDT_UUID", "dee9bf42-5ecc-4e32-a49e-bd4458a08082")
 
 CANDIDATES = 60            # OpenVPN line
 SSTP_CANDIDATES = 150      # VLESS stage-1 pool (volunteer servers)
-CHAIN_TEST_CAP = 36        # max full-chain verifications per run
+CHAIN_TEST_CAP = 48        # max full-chain verifications per run
 MAX_NODES = 12
 MIN_OK = 3                 # OpenVPN line keep-previous threshold
 ACADEMIC_PREFIX = "219.100.37."  # VPNGate's own university block, not residential
@@ -346,10 +351,19 @@ def build_vless(servers):
     print(f"vless stage b: {len(probed)} passed SSTP probe: "
           + ", ".join(s["host_name"] for s in probed), flush=True)
     # Stage (c): full-chain verification — real traffic, real exit IP.
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as ex:
+    # PPP completion is a per-attempt lottery: every candidate that fails
+    # its first draw gets exactly one retry later in the same run.
+    with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
         oks = list(ex.map(verify_chain, probed))
     chained = [s for s, ok in zip(probed, oks) if ok]
-    print(f"vless stage c: {len(chained)} completed the full chain", flush=True)
+    failed = [s for s, ok in zip(probed, oks) if not ok]
+    print(f"vless stage c: {len(chained)} completed the full chain "
+          f"({len(failed)} failed, retrying once)", flush=True)
+    if failed:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=6) as ex:
+            oks2 = list(ex.map(verify_chain, failed))
+        chained += [s for s, ok in zip(failed, oks2) if ok]
+        print(f"vless stage c retry: {len(chained)} total completed", flush=True)
     # Classification: the exit must be a residential IP.
     good = classify_exits([s["exit_ip"] for s in chained])
     verified = []
@@ -399,21 +413,34 @@ def main():
     os.makedirs(os.path.join(tmp, "ovpn"))
     os.makedirs(os.path.join(tmp, "ovpn-chain"))
 
-    # Always publish the current verification result for the VLESS line —
-    # an empty list when nothing passed. Keeping a stale list would present
-    # unverified (possibly non-residential) nodes as current.
-    with open(os.path.join(tmp, "vless.txt"), "w") as fh:
-        fh.write("\n".join(vless_link(s) for s in vless_nodes) + ("\n" if vless_nodes else ""))
-    details = [{
-        "remark": f"{s['cc']}-jiakuan-{s['host_name']}",
-        "sstp_host": f"{s['host_name']}.opengw.net",
-        "country": s["country"],
-        "exit_ip": s["exit_ip"],
-        "exit_isp": s.get("exit_isp", ""),
-        "chain_ms": s["chain_ms"],
-    } for s in vless_nodes]
-    with open(os.path.join(tmp, "vless.json"), "w") as fh:
-        json.dump(details, fh, ensure_ascii=False, indent=1)
+    # Availability-first publishing: if this round verified nodes, publish
+    # them (stamped with verified_at). If it verified none but a previous
+    # verified list exists, keep that list untouched — the page labels it
+    # with its original verification time, never as fresh. Only when no
+    # previous list exists is an empty result published.
+    verified_at = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime())
+    prev_details = []
+    if not vless_nodes:
+        try:
+            with open(os.path.join(OUT_DIR, "vless.json")) as fh:
+                prev_details = json.load(fh)
+        except Exception:
+            prev_details = []
+    keep_prev = not vless_nodes and bool(prev_details)
+    if vless_nodes or not keep_prev:
+        with open(os.path.join(tmp, "vless.txt"), "w") as fh:
+            fh.write("\n".join(vless_link(s) for s in vless_nodes) + ("\n" if vless_nodes else ""))
+        details = [{
+            "remark": f"{s['cc']}-jiakuan-{s['host_name']}",
+            "sstp_host": f"{s['host_name']}.opengw.net",
+            "country": s["country"],
+            "exit_ip": s["exit_ip"],
+            "exit_isp": s.get("exit_isp", ""),
+            "chain_ms": s["chain_ms"],
+            "verified_at": verified_at,
+        } for s in vless_nodes]
+        with open(os.path.join(tmp, "vless.json"), "w") as fh:
+            json.dump(details, fh, ensure_ascii=False, indent=1)
 
     rows_v, rows_o, hosts_lines, sub_lines = [], [], [], []
     for i, s in enumerate(vless_nodes, 1):
@@ -424,6 +451,16 @@ def main():
                 host=html.escape(s["host_name"] + ".opengw.net"),
                 exit_ip=html.escape(s["exit_ip"]), isp=html.escape(s.get("exit_isp", "")),
                 cms=s["chain_ms"]))
+    if keep_prev:
+        for i, d in enumerate(prev_details, 1):
+            rows_v.append(
+                "<tr><td>{i}</td><td>{country}</td><td>{host}</td>"
+                "<td>{exit_ip}</td><td>{isp}</td><td>{cms} ms</td></tr>".format(
+                    i=i, country=html.escape(d.get("country", "")),
+                    host=html.escape(d.get("sstp_host", "")),
+                    exit_ip=html.escape(d.get("exit_ip", "")),
+                    isp=html.escape(d.get("exit_isp", "")),
+                    cms=d.get("chain_ms", "")))
     for i, s in enumerate(ovpn_nodes, 1):
         name = f"{i:02d}-{s['cc']}-{s['remote_host']}.ovpn"
         with open(os.path.join(tmp, "ovpn", name), "w") as fh:
@@ -455,6 +492,12 @@ def main():
         vless_note = (f'<p><a href="vless.txt">vless.txt</a> — {len(vless_nodes)} 条家宽 VLESS 节点。'
                       "每条都经过全链路实测：真实流量经 CF 入口 + SSTP 链到该服务器出网，"
                       "下表出口 IP 为实测值且已核为住宅运营商（非机房/非学术网）。</p>")
+    elif keep_prev:
+        prev_at = max((d.get("verified_at", "") for d in prev_details), default="")
+        vless_note = (f'<p><a href="vless.txt">vless.txt</a> — 本轮没有新节点通过全链路住宅出口验证；'
+                      f"下表为上次验证通过的 {len(prev_details)} 条节点（验证时间："
+                      f"{html.escape(prev_at or '较早')}），可能已部分失效；"
+                      "系统会继续自动筛选，验出新节点后自动替换。</p>")
     else:
         vless_note = ("<p>本轮没有节点通过全链路住宅出口验证，vless.txt 为空；"
                       "系统每 30 分钟自动重新筛选，出现合格节点会自动发布。</p>")
