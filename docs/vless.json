@@ -3,36 +3,9 @@
   "remark": "RO-jiakuan-opengw",
   "sstp_host": "opengw.opengw.net",
   "country": "Romania",
-  "exit_ip": "187.15.135.240",
+  "exit_ip": "187.15.134.164",
   "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 2597,
-  "verified_at": "2026-11-15 07:06 UTC"
- },
- {
-  "remark": "JP-jiakuan-laud",
-  "sstp_host": "laud.opengw.net",
-  "country": "Japan",
-  "exit_ip": "187.15.134.131",
-  "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 2994,
-  "verified_at": "2026-11-15 07:06 UTC"
- },
- {
-  "remark": "JP-jiakuan-vpn980909101",
-  "sstp_host": "vpn980909101.opengw.net",
-  "country": "Japan",
-  "exit_ip": "128.27.29.93",
-  "exit_isp": "OPTAGE Inc.",
-  "chain_ms": 4155,
-  "verified_at": "2026-11-15 07:06 UTC"
- },
- {
-  "remark": "KR-jiakuan-vpn801249850",
-  "sstp_host": "vpn801249850.opengw.net",
-  "country": "Korea Republic of",
-  "exit_ip": "221.165.160.217",
-  "exit_isp": "Korea Telecom",
-  "chain_ms": 5827,
-  "verified_at": "2026-11-15 07:06 UTC"
+  "chain_ms": 2722,
+  "verified_at": "2026-11-15 14:42 UTC"
  }
 ]
