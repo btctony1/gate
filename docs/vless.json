@@ -1,11 +1,11 @@
 [
  {
-  "remark": "KR-jiakuan-vpn405073805",
-  "sstp_host": "vpn405073805.opengw.net",
+  "remark": "KR-jiakuan-vpn801249850",
+  "sstp_host": "vpn801249850.opengw.net",
   "country": "Korea Republic of",
-  "exit_ip": "121.137.249.48",
+  "exit_ip": "221.165.160.217",
   "exit_isp": "Korea Telecom",
-  "chain_ms": 2450,
-  "verified_at": "2026-11-15 05:21 UTC"
+  "chain_ms": 3835,
+  "verified_at": "2026-11-15 05:28 UTC"
  }
 ]
