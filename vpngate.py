@@ -448,10 +448,27 @@ def _diverse_pick(alive, cap):
     return picks
 
 
+def _read_file_bytes(path):
+    """Read a file that may be root-owned with restrictive permissions
+    (the openvpn daemon's log/pid files): plain read first, sudo cat as
+    fallback. Returns b"" when unreadable."""
+    try:
+        with open(path, "rb") as fh:
+            return fh.read()
+    except OSError:
+        pass
+    try:
+        r = subprocess.run(["sudo", "cat", path], timeout=10, capture_output=True)
+        if r.returncode == 0:
+            return r.stdout
+    except Exception:
+        pass
+    return b""
+
+
 def _read_pid(pid_path):
     try:
-        with open(pid_path) as fh:
-            return int(fh.read().strip())
+        return int(_read_file_bytes(pid_path).decode("utf-8", "replace").strip())
     except Exception:
         return None
 
@@ -494,16 +511,12 @@ def _ovpn_exit_test(s, slot, workdir):
     fatal = (b"Exiting due to fatal error", b"Cannot open TUN/TAP dev",
              b"Options error:")
     while time.time() < deadline:
-        try:
-            with open(log_path, "rb") as fh:
-                content = fh.read()
-            if b"Initialization Sequence Completed" in content:
-                up = True
-                break
-            if any(marker in content for marker in fatal):
-                break
-        except OSError:
-            pass
+        content = _read_file_bytes(log_path)
+        if b"Initialization Sequence Completed" in content:
+            up = True
+            break
+        if any(marker in content for marker in fatal):
+            break
         time.sleep(1.5)
     ip = None
     if up:
@@ -547,11 +560,9 @@ def _ovpn_exit_test(s, slot, workdir):
 def _dump_ovpn_log(s, log_path):
     """Print the tail of a failed tunnel's openvpn log into the run log so
     the failure cause is visible without runner access."""
-    try:
-        with open(log_path, "rb") as fh:
-            lines = fh.read().decode("utf-8", "replace").splitlines()
-    except OSError as e:
-        print(f"ovpn log {s['remote_host']}: unreadable ({e})", flush=True)
+    lines = _read_file_bytes(log_path).decode("utf-8", "replace").splitlines()
+    if not lines:
+        print(f"ovpn log {s['remote_host']}: unreadable or empty", flush=True)
         return
     for line in lines[-12:]:
         print(f"ovpn log {s['remote_host']}: {line[:200]}", flush=True)
@@ -580,6 +591,7 @@ def verify_ovpn_exits(alive):
     print(f"ovpn verify: exit-testing {len(picks)} candidates "
           f"({len(alive)} reachable)", flush=True)
     workroot = tempfile.mkdtemp(prefix="gate-ovpn-")
+    os.chmod(workroot, 0o755)  # mkdtemp is 0700; the root daemon writes inside
     slots = queue.Queue()
     for i in range(OVPN_VERIFY_SLOTS):
         slots.put(i)
@@ -589,6 +601,7 @@ def verify_ovpn_exits(alive):
         try:
             wd = os.path.join(workroot, f"s{slot}-{s['remote_host']}")
             os.makedirs(wd, exist_ok=True)
+            os.chmod(wd, 0o755)
             return _ovpn_exit_test(s, slot, wd)
         except Exception as e:
             print(f"ovpn verify {s.get('remote_host')}: error "
