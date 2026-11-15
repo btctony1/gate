@@ -476,27 +476,34 @@ def _ovpn_exit_test(s, slot, workdir):
         fh.write(s["config"])
     started = time.time()
     try:
-        subprocess.run(["sudo", "openvpn", "--config", cfg_path, "--dev", dev,
-                        "--route-nopull", "--daemon", "--log", log_path,
-                        "--writepid", pid_path],
-                       timeout=20, capture_output=True, text=True)
+        r = subprocess.run(["sudo", "openvpn", "--config", cfg_path, "--dev", dev,
+                            "--route-nopull", "--daemon", "--log", log_path,
+                            "--writepid", pid_path],
+                           timeout=20, capture_output=True, text=True)
+        if r.returncode not in (0, None):
+            print(f"ovpn verify {s['remote_host']}: openvpn exited rc={r.returncode} "
+                  f"stderr: {(r.stderr or '').strip()[:200]}", flush=True)
+            _dump_ovpn_log(s, log_path)
+            return False
     except Exception as e:
         print(f"ovpn verify {s['remote_host']}: start error "
               f"{type(e).__name__} {str(e)[:80]}", flush=True)
         return False
     up = False
     deadline = time.time() + OVPN_TUN_TIMEOUT_S
+    fatal = (b"Exiting due to fatal error", b"Cannot open TUN/TAP dev",
+             b"Options error:")
     while time.time() < deadline:
         try:
             with open(log_path, "rb") as fh:
-                if b"Initialization Sequence Completed" in fh.read():
-                    up = True
-                    break
+                content = fh.read()
+            if b"Initialization Sequence Completed" in content:
+                up = True
+                break
+            if any(marker in content for marker in fatal):
+                break
         except OSError:
             pass
-        pid = _read_pid(pid_path)
-        if pid and not _pid_alive(pid):
-            break  # daemon already exited; fail fast
         time.sleep(1.5)
     ip = None
     if up:
@@ -532,7 +539,22 @@ def _ovpn_exit_test(s, slot, workdir):
     print(f"ovpn verify {s['remote_host']}: "
           f"{'tunnel up but no exit IP measured' if up else 'tunnel did not come up'}",
           flush=True)
+    if not up:
+        _dump_ovpn_log(s, log_path)
     return False
+
+
+def _dump_ovpn_log(s, log_path):
+    """Print the tail of a failed tunnel's openvpn log into the run log so
+    the failure cause is visible without runner access."""
+    try:
+        with open(log_path, "rb") as fh:
+            lines = fh.read().decode("utf-8", "replace").splitlines()
+    except OSError as e:
+        print(f"ovpn log {s['remote_host']}: unreadable ({e})", flush=True)
+        return
+    for line in lines[-12:]:
+        print(f"ovpn log {s['remote_host']}: {line[:200]}", flush=True)
 
 
 def verify_ovpn_exits(alive):
@@ -548,6 +570,12 @@ def verify_ovpn_exits(alive):
         print("ovpn verify: /dev/net/tun unavailable; "
               "skipping exit verification (fallback: reachability only)", flush=True)
         return []
+    try:
+        ver = subprocess.run(["openvpn", "--version"], timeout=10,
+                             capture_output=True, text=True).stdout.splitlines()
+        print(f"ovpn verify: {ver[0] if ver else 'openvpn version unknown'}", flush=True)
+    except Exception:
+        pass
     picks = _diverse_pick(alive, OVPN_VERIFY_CAP)
     print(f"ovpn verify: exit-testing {len(picks)} candidates "
           f"({len(alive)} reachable)", flush=True)
