@@ -5,7 +5,16 @@
   "country": "Japan",
   "exit_ip": "187.15.134.131",
   "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 2164,
-  "verified_at": "2026-11-16 07:01 UTC"
+  "chain_ms": 3060,
+  "verified_at": "2026-11-16 16:42 UTC"
+ },
+ {
+  "remark": "JP-jiakuan-vpn980909101",
+  "sstp_host": "vpn980909101.opengw.net",
+  "country": "Japan",
+  "exit_ip": "128.27.29.93",
+  "exit_isp": "OPTAGE Inc.",
+  "chain_ms": 9901,
+  "verified_at": "2026-11-16 16:42 UTC"
  }
 ]
