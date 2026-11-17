@@ -1,122 +1,112 @@
 [
  {
-  "remark": "JP-jiakuan-222.9.232.66",
-  "remote_host": "222.9.232.66",
-  "remote_port": 1914,
+  "remark": "JP-jiakuan-153.145.144.225",
+  "remote_host": "153.145.144.225",
+  "remote_port": 1870,
   "country": "Japan",
-  "exit_ip": "222.9.232.66",
-  "exit_isp": "Chubu Telecommunications Company, Inc.",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "01-JP-222.9.232.66.ovpn"
+  "exit_ip": "153.145.144.225",
+  "exit_isp": "NTT Communications Corporation",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "01-JP-153.145.144.225.ovpn"
  },
  {
-  "remark": "KR-jiakuan-112.187.160.26",
-  "remote_host": "112.187.160.26",
-  "remote_port": 995,
-  "country": "Korea Republic of",
-  "exit_ip": "221.146.47.187",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "02-KR-112.187.160.26.ovpn"
- },
- {
-  "remark": "KR-jiakuan-121.138.92.80",
-  "remote_host": "121.138.92.80",
-  "remote_port": 995,
-  "country": "Korea Republic of",
-  "exit_ip": "221.149.102.128",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "03-KR-121.138.92.80.ovpn"
- },
- {
-  "remark": "KR-jiakuan-125.134.49.9",
-  "remote_host": "125.134.49.9",
-  "remote_port": 995,
-  "country": "Korea Republic of",
-  "exit_ip": "121.175.193.131",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "04-KR-125.134.49.9.ovpn"
- },
- {
-  "remark": "KR-jiakuan-121.154.37.176",
-  "remote_host": "121.154.37.176",
-  "remote_port": 995,
-  "country": "Korea Republic of",
-  "exit_ip": "211.38.57.123",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "05-KR-121.154.37.176.ovpn"
- },
- {
-  "remark": "JP-jiakuan-59.146.142.232",
-  "remote_host": "59.146.142.232",
-  "remote_port": 1234,
+  "remark": "JP-jiakuan-118.154.9.31",
+  "remote_host": "118.154.9.31",
+  "remote_port": 1244,
   "country": "Japan",
-  "exit_ip": "59.146.142.232",
-  "exit_isp": "Sony Network Communications Inc",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "06-JP-59.146.142.232.ovpn"
+  "exit_ip": "118.154.9.31",
+  "exit_isp": "DION (KDDI CORPORATION)",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "02-JP-118.154.9.31.ovpn"
  },
  {
-  "remark": "KR-jiakuan-119.192.210.134",
-  "remote_host": "119.192.210.134",
-  "remote_port": 1403,
+  "remark": "KR-jiakuan-61.76.11.83",
+  "remote_host": "61.76.11.83",
+  "remote_port": 1784,
   "country": "Korea Republic of",
-  "exit_ip": "119.192.210.134",
+  "exit_ip": "61.76.11.83",
   "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "07-KR-119.192.210.134.ovpn"
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "03-KR-61.76.11.83.ovpn"
  },
  {
-  "remark": "KR-jiakuan-125.142.199.179",
-  "remote_host": "125.142.199.179",
+  "remark": "KR-jiakuan-125.133.234.181",
+  "remote_host": "125.133.234.181",
   "remote_port": 995,
   "country": "Korea Republic of",
-  "exit_ip": "14.42.117.153",
+  "exit_ip": "125.133.234.180",
   "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "08-KR-125.142.199.179.ovpn"
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "04-KR-125.133.234.181.ovpn"
  },
  {
-  "remark": "KR-jiakuan-14.36.183.252",
-  "remote_host": "14.36.183.252",
+  "remark": "KR-jiakuan-121.186.186.97",
+  "remote_host": "121.186.186.97",
+  "remote_port": 1295,
+  "country": "Korea Republic of",
+  "exit_ip": "121.186.186.97",
+  "exit_isp": "Korea Telecom",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "05-KR-121.186.186.97.ovpn"
+ },
+ {
+  "remark": "KR-jiakuan-211.245.59.79",
+  "remote_host": "211.245.59.79",
+  "remote_port": 1985,
+  "country": "Korea Republic of",
+  "exit_ip": "211.245.59.79",
+  "exit_isp": "SK Broadband Co Ltd",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "06-KR-211.245.59.79.ovpn"
+ },
+ {
+  "remark": "KR-jiakuan-220.125.120.91",
+  "remote_host": "220.125.120.91",
   "remote_port": 995,
   "country": "Korea Republic of",
-  "exit_ip": "61.75.59.251",
+  "exit_ip": "220.83.122.66",
   "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "09-KR-14.36.183.252.ovpn"
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "07-KR-220.125.120.91.ovpn"
  },
  {
-  "remark": "KR-jiakuan-61.82.162.106",
-  "remote_host": "61.82.162.106",
-  "remote_port": 1333,
+  "remark": "KR-jiakuan-118.33.153.180",
+  "remote_host": "118.33.153.180",
+  "remote_port": 1274,
   "country": "Korea Republic of",
-  "exit_ip": "61.82.162.106",
+  "exit_ip": "118.33.153.180",
   "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "10-KR-61.82.162.106.ovpn"
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "08-KR-118.33.153.180.ovpn"
  },
  {
-  "remark": "KR-jiakuan-220.127.233.42",
-  "remote_host": "220.127.233.42",
+  "remark": "TH-jiakuan-27.130.38.144",
+  "remote_host": "27.130.38.144",
+  "remote_port": 1754,
+  "country": "Thailand",
+  "exit_ip": "27.130.38.144",
+  "exit_isp": "Triple T Broadband Public Company Limited",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "09-TH-27.130.38.144.ovpn"
+ },
+ {
+  "remark": "VN-jiakuan-42.116.217.95",
+  "remote_host": "42.116.217.95",
+  "remote_port": 1743,
+  "country": "Viet Nam",
+  "exit_ip": "42.116.217.95",
+  "exit_isp": "FPT Telecom Company",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "10-VN-42.116.217.95.ovpn"
+ },
+ {
+  "remark": "IN-jiakuan-103.172.220.133",
+  "remote_host": "103.172.220.133",
   "remote_port": 995,
-  "country": "Korea Republic of",
-  "exit_ip": "221.151.241.83",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "11-KR-220.127.233.42.ovpn"
- },
- {
-  "remark": "KR-jiakuan-211.185.142.92",
-  "remote_host": "211.185.142.92",
-  "remote_port": 995,
-  "country": "Korea Republic of",
-  "exit_ip": "211.185.142.93",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-17 08:45 UTC",
-  "file": "12-KR-211.185.142.92.ovpn"
+  "country": "India",
+  "exit_ip": "103.78.12.196",
+  "exit_isp": "Green Tech Net Com Pvt Ltd",
+  "verified_at": "2026-11-17 18:06 UTC",
+  "file": "11-IN-103.172.220.133.ovpn"
  }
 ]

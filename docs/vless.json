@@ -3,9 +3,9 @@
   "remark": "RO-jiakuan-opengw",
   "sstp_host": "opengw.opengw.net",
   "country": "Romania",
-  "exit_ip": "187.15.134.162",
+  "exit_ip": "187.15.136.110",
   "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 2796,
-  "verified_at": "2026-11-17 08:45 UTC"
+  "chain_ms": 3204,
+  "verified_at": "2026-11-17 18:06 UTC"
  }
 ]
