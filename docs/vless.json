@@ -1,11 +1,11 @@
 [
  {
-  "remark": "TW-jiakuan-jayporeonvpn01",
-  "sstp_host": "jayporeonvpn01.opengw.net",
-  "country": "Taiwan",
-  "exit_ip": "118.166.8.172",
-  "exit_isp": "Chunghwa Telecom Co., Ltd.",
-  "chain_ms": 3645,
-  "verified_at": "2026-11-17 00:42 UTC"
+  "remark": "RO-jiakuan-opengw",
+  "sstp_host": "opengw.opengw.net",
+  "country": "Romania",
+  "exit_ip": "187.15.134.162",
+  "exit_isp": "GSL Networks Pty LTD",
+  "chain_ms": 2796,
+  "verified_at": "2026-11-17 08:45 UTC"
  }
 ]
