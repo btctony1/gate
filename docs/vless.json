@@ -1,11 +1,11 @@
 [
  {
-  "remark": "KR-jiakuan-vpn866140670",
-  "sstp_host": "vpn866140670.opengw.net",
-  "country": "Korea Republic of",
-  "exit_ip": "211.222.139.26",
-  "exit_isp": "Korea Telecom",
-  "chain_ms": 3032,
-  "verified_at": "2026-11-18 08:09 UTC"
+  "remark": "GD-jiakuan-diamondgnd",
+  "sstp_host": "diamondgnd.opengw.net",
+  "country": "Grenada",
+  "exit_ip": "74.122.88.200",
+  "exit_isp": "Columbus Communications Grenada Ltd.",
+  "chain_ms": 2535,
+  "verified_at": "2026-11-18 23:35 UTC"
  }
 ]

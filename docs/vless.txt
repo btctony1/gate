@@ -1,1 +1,1 @@
-vless://dee9bf42-5ecc-4e32-a49e-bd4458a08082@edt.coo.qzz.io:443?encryption=none&security=tls&sni=edt.coo.qzz.io&fp=randomized&type=ws&host=edt.coo.qzz.io&path=%2F%3Fed%3D2048%26sstp%3Dvpn%253Avpn%2540vpn866140670.opengw.net#KR-jiakuan-vpn866140670
+vless://dee9bf42-5ecc-4e32-a49e-bd4458a08082@edt.coo.qzz.io:443?encryption=none&security=tls&sni=edt.coo.qzz.io&fp=randomized&type=ws&host=edt.coo.qzz.io&path=%2F%3Fed%3D2048%26sstp%3Dvpn%253Avpn%2540diamondgnd.opengw.net#GD-jiakuan-diamondgnd
