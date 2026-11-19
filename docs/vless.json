@@ -5,7 +5,16 @@
   "country": "Romania",
   "exit_ip": "187.15.135.240",
   "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 3398,
-  "verified_at": "2026-11-19 13:43 UTC"
+  "chain_ms": 2108,
+  "verified_at": "2026-11-19 22:00 UTC"
+ },
+ {
+  "remark": "JP-jiakuan-laud",
+  "sstp_host": "laud.opengw.net",
+  "country": "Japan",
+  "exit_ip": "187.15.134.162",
+  "exit_isp": "GSL Networks Pty LTD",
+  "chain_ms": 2449,
+  "verified_at": "2026-11-19 22:00 UTC"
  }
 ]
