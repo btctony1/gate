@@ -1,11 +1,20 @@
 [
  {
-  "remark": "GD-jiakuan-diamondgnd",
-  "sstp_host": "diamondgnd.opengw.net",
-  "country": "Grenada",
-  "exit_ip": "74.122.88.200",
-  "exit_isp": "Columbus Communications Grenada Ltd.",
-  "chain_ms": 2535,
-  "verified_at": "2026-11-18 23:35 UTC"
+  "remark": "RO-jiakuan-opengw",
+  "sstp_host": "opengw.opengw.net",
+  "country": "Romania",
+  "exit_ip": "187.15.135.101",
+  "exit_isp": "GSL Networks Pty LTD",
+  "chain_ms": 3293,
+  "verified_at": "2026-11-19 04:26 UTC"
+ },
+ {
+  "remark": "JP-jiakuan-laud",
+  "sstp_host": "laud.opengw.net",
+  "country": "Japan",
+  "exit_ip": "187.15.134.162",
+  "exit_isp": "GSL Networks Pty LTD",
+  "chain_ms": 3304,
+  "verified_at": "2026-11-19 04:26 UTC"
  }
 ]
