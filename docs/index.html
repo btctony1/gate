@@ -3,45 +3,48 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>VPN Gate 家宽节点</title></head><body>
 <h1>VPN Gate 家宽节点（自动更新）</h1>
-<p>更新时间：2026-11-22 16:34 UTC</p>
+<p>更新时间：2026-11-22 22:20 UTC</p>
 <h2>家宽 VLESS 节点（SSTP 链式 · 全链路实测）</h2>
-<p><a href="vless.txt">vless.txt</a> — 1 条家宽 VLESS 节点。每条都经过全链路实测：真实流量经 CF 入口 + SSTP 链到该服务器出网，下表出口 IP 为实测值且已核为住宅运营商（非机房/非学术网）。</p>
+<p><a href="vless.txt">vless.txt</a> — 4 条家宽 VLESS 节点。每条都经过全链路实测：真实流量经 CF 入口 + SSTP 链到该服务器出网，下表出口 IP 为实测值且已核为住宅运营商（非机房/非学术网）。</p>
 <table border="1" cellspacing="0" cellpadding="6">
 <tr><th>#</th><th>国家</th><th>家宽服务器（SSTP）</th><th>实测出口 IP</th><th>出口运营商</th><th>链路耗时</th></tr>
-<tr><td>1</td><td>JP Japan</td><td>laud.opengw.net</td><td>187.15.134.162</td><td>GSL Networks Pty LTD</td><td>3064 ms</td></tr>
+<tr><td>1</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn132328711.opengw.net</td><td>150.40.105.11</td><td>MAXKO d.o.o.</td><td>2702 ms</td></tr>
+<tr><td>2</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn429922709.opengw.net</td><td>150.40.105.7</td><td>MAXKO d.o.o.</td><td>2719 ms</td></tr>
+<tr><td>3</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn981204829.opengw.net</td><td>150.40.105.12</td><td>MAXKO d.o.o.</td><td>2835 ms</td></tr>
+<tr><td>4</td><td>HR Croatia (LOCAL Name: Hrvatska)</td><td>vpn648581557.opengw.net</td><td>150.40.105.5</td><td>MAXKO d.o.o.</td><td>3159 ms</td></tr>
 </table>
 <h2>OpenVPN 家宽节点（出口实测）</h2>
 <p>12 条 OpenVPN 配置经过真实隧道出口实测：检测机实际连上该服务器后从隧道内测得出口 IP，下表出口 IP 为实测值且已核为住宅运营商（非机房/非学术网）。</p>
 <table border="1" cellspacing="0" cellpadding="6">
 <tr><th>#</th><th>国家</th><th>服务器</th><th>实测出口 IP</th><th>出口运营商</th><th>配置</th></tr>
-<tr><td>1</td><td>KR Korea Republic of</td><td>121.177.105.70</td><td>121.177.105.70</td><td>Korea Telecom</td><td><a href="ovpn-verified/01-KR-121.177.105.70.ovpn">直连</a> · <a href="ovpn-verified-chain/01-KR-121.177.105.70.ovpn">链式</a></td></tr>
-<tr><td>2</td><td>KR Korea Republic of</td><td>14.49.104.132</td><td>14.49.104.132</td><td>Korea Telecom</td><td><a href="ovpn-verified/02-KR-14.49.104.132.ovpn">直连</a> · <a href="ovpn-verified-chain/02-KR-14.49.104.132.ovpn">链式</a></td></tr>
-<tr><td>3</td><td>KR Korea Republic of</td><td>125.133.126.137</td><td>125.133.126.137</td><td>KORNET</td><td><a href="ovpn-verified/03-KR-125.133.126.137.ovpn">直连</a> · <a href="ovpn-verified-chain/03-KR-125.133.126.137.ovpn">链式</a></td></tr>
-<tr><td>4</td><td>KR Korea Republic of</td><td>183.104.129.126</td><td>183.104.129.126</td><td>Korea Telecom</td><td><a href="ovpn-verified/04-KR-183.104.129.126.ovpn">直连</a> · <a href="ovpn-verified-chain/04-KR-183.104.129.126.ovpn">链式</a></td></tr>
-<tr><td>5</td><td>KR Korea Republic of</td><td>211.104.214.78</td><td>218.146.184.184</td><td>Korea Telecom</td><td><a href="ovpn-verified/05-KR-211.104.214.78.ovpn">直连</a> · <a href="ovpn-verified-chain/05-KR-211.104.214.78.ovpn">链式</a></td></tr>
-<tr><td>6</td><td>KR Korea Republic of</td><td>211.117.54.119</td><td>211.117.54.119</td><td>SK Broadband Co Ltd</td><td><a href="ovpn-verified/06-KR-211.117.54.119.ovpn">直连</a> · <a href="ovpn-verified-chain/06-KR-211.117.54.119.ovpn">链式</a></td></tr>
-<tr><td>7</td><td>VN Viet Nam</td><td>42.114.161.238</td><td>42.114.161.238</td><td>FPT Telecom Company</td><td><a href="ovpn-verified/07-VN-42.114.161.238.ovpn">直连</a> · <a href="ovpn-verified-chain/07-VN-42.114.161.238.ovpn">链式</a></td></tr>
-<tr><td>8</td><td>JP Japan</td><td>118.240.129.23</td><td>118.240.129.23</td><td>Sony Network Communications Inc</td><td><a href="ovpn-verified/08-JP-118.240.129.23.ovpn">直连</a> · <a href="ovpn-verified-chain/08-JP-118.240.129.23.ovpn">链式</a></td></tr>
-<tr><td>9</td><td>KR Korea Republic of</td><td>210.105.53.66</td><td>210.105.53.66</td><td>Korea Telecom</td><td><a href="ovpn-verified/09-KR-210.105.53.66.ovpn">直连</a> · <a href="ovpn-verified-chain/09-KR-210.105.53.66.ovpn">链式</a></td></tr>
-<tr><td>10</td><td>KR Korea Republic of</td><td>220.92.53.186</td><td>220.92.53.186</td><td>Korea Telecom</td><td><a href="ovpn-verified/10-KR-220.92.53.186.ovpn">直连</a> · <a href="ovpn-verified-chain/10-KR-220.92.53.186.ovpn">链式</a></td></tr>
-<tr><td>11</td><td>KR Korea Republic of</td><td>210.123.109.177</td><td>210.123.109.182</td><td>Korea Telecom</td><td><a href="ovpn-verified/11-KR-210.123.109.177.ovpn">直连</a> · <a href="ovpn-verified-chain/11-KR-210.123.109.177.ovpn">链式</a></td></tr>
-<tr><td>12</td><td>AU Australia</td><td>125.253.56.120</td><td>125.253.56.120</td><td>SUPERLOOP (AUSTRALIA) PTY LTD</td><td><a href="ovpn-verified/12-AU-125.253.56.120.ovpn">直连</a> · <a href="ovpn-verified-chain/12-AU-125.253.56.120.ovpn">链式</a></td></tr>
+<tr><td>1</td><td>JP Japan</td><td>126.59.87.181</td><td>126.59.87.181</td><td>SoftBank Corp.</td><td><a href="ovpn-verified/01-JP-126.59.87.181.ovpn">直连</a> · <a href="ovpn-verified-chain/01-JP-126.59.87.181.ovpn">链式</a></td></tr>
+<tr><td>2</td><td>KR Korea Republic of</td><td>58.127.236.242</td><td>58.127.236.242</td><td>SK Broadband Co Ltd</td><td><a href="ovpn-verified/02-KR-58.127.236.242.ovpn">直连</a> · <a href="ovpn-verified-chain/02-KR-58.127.236.242.ovpn">链式</a></td></tr>
+<tr><td>3</td><td>KR Korea Republic of</td><td>211.51.80.113</td><td>211.51.80.113</td><td>Korea Telecom</td><td><a href="ovpn-verified/03-KR-211.51.80.113.ovpn">直连</a> · <a href="ovpn-verified-chain/03-KR-211.51.80.113.ovpn">链式</a></td></tr>
+<tr><td>4</td><td>KR Korea Republic of</td><td>42.82.190.232</td><td>42.82.190.232</td><td>LG HelloVision Corp.</td><td><a href="ovpn-verified/04-KR-42.82.190.232.ovpn">直连</a> · <a href="ovpn-verified-chain/04-KR-42.82.190.232.ovpn">链式</a></td></tr>
+<tr><td>5</td><td>KR Korea Republic of</td><td>61.82.162.106</td><td>61.82.162.106</td><td>Korea Telecom</td><td><a href="ovpn-verified/05-KR-61.82.162.106.ovpn">直连</a> · <a href="ovpn-verified-chain/05-KR-61.82.162.106.ovpn">链式</a></td></tr>
+<tr><td>6</td><td>KR Korea Republic of</td><td>125.148.227.117</td><td>112.161.229.103</td><td>Korea Telecom</td><td><a href="ovpn-verified/06-KR-125.148.227.117.ovpn">直连</a> · <a href="ovpn-verified-chain/06-KR-125.148.227.117.ovpn">链式</a></td></tr>
+<tr><td>7</td><td>KR Korea Republic of</td><td>211.213.98.231</td><td>211.213.98.231</td><td>SK Broadband Co Ltd</td><td><a href="ovpn-verified/07-KR-211.213.98.231.ovpn">直连</a> · <a href="ovpn-verified-chain/07-KR-211.213.98.231.ovpn">链式</a></td></tr>
+<tr><td>8</td><td>KR Korea Republic of</td><td>175.201.195.240</td><td>175.201.195.240</td><td>Korea Telecom</td><td><a href="ovpn-verified/08-KR-175.201.195.240.ovpn">直连</a> · <a href="ovpn-verified-chain/08-KR-175.201.195.240.ovpn">链式</a></td></tr>
+<tr><td>9</td><td>KR Korea Republic of</td><td>14.92.210.132</td><td>14.92.210.132</td><td>Korea Telecom</td><td><a href="ovpn-verified/09-KR-14.92.210.132.ovpn">直连</a> · <a href="ovpn-verified-chain/09-KR-14.92.210.132.ovpn">链式</a></td></tr>
+<tr><td>10</td><td>VN Viet Nam</td><td>42.114.161.238</td><td>42.114.161.238</td><td>FPT Telecom Company</td><td><a href="ovpn-verified/10-VN-42.114.161.238.ovpn">直连</a> · <a href="ovpn-verified-chain/10-VN-42.114.161.238.ovpn">链式</a></td></tr>
+<tr><td>11</td><td>JP Japan</td><td>116.220.123.35</td><td>116.220.124.22</td><td>JCOM Co., Ltd.</td><td><a href="ovpn-verified/11-JP-116.220.123.35.ovpn">直连</a> · <a href="ovpn-verified-chain/11-JP-116.220.123.35.ovpn">链式</a></td></tr>
+<tr><td>12</td><td>KR Korea Republic of</td><td>119.195.241.13</td><td>121.170.29.237</td><td>Korea Telecom</td><td><a href="ovpn-verified/12-KR-119.195.241.13.ovpn">直连</a> · <a href="ovpn-verified-chain/12-KR-119.195.241.13.ovpn">链式</a></td></tr>
 </table>
 <h2>OpenVPN 节点（仅连通性测试）</h2>
 <p>直连 = OpenVPN 应用直接导入；链式 = 先在本机开着 VLESS 客户端（SOCKS 10808）再导入链式配置。</p>
 <table border="1" cellspacing="0" cellpadding="6">
 <tr><th>#</th><th>国家</th><th>服务器</th><th>速度</th><th>列表Ping</th><th>实测</th><th>配置</th></tr>
-<tr><td>1</td><td>JP Japan</td><td>106.179.100.57</td><td>545.1 Mbps</td><td>4 ms</td><td>163 ms</td><td><a href="ovpn/01-JP-106.179.100.57.ovpn">直连</a> · <a href="ovpn-chain/01-JP-106.179.100.57.ovpn">链式</a></td></tr>
-<tr><td>2</td><td>JP Japan</td><td>133.114.158.248</td><td>358.8 Mbps</td><td>2 ms</td><td>178 ms</td><td><a href="ovpn/02-JP-133.114.158.248.ovpn">直连</a> · <a href="ovpn-chain/02-JP-133.114.158.248.ovpn">链式</a></td></tr>
-<tr><td>3</td><td>JP Japan</td><td>219.100.37.207</td><td>195.1 Mbps</td><td>8 ms</td><td>172 ms</td><td><a href="ovpn/03-JP-219.100.37.207.ovpn">直连</a> · <a href="ovpn-chain/03-JP-219.100.37.207.ovpn">链式</a></td></tr>
-<tr><td>4</td><td>JP Japan</td><td>219.100.37.182</td><td>240.9 Mbps</td><td>8 ms</td><td>174 ms</td><td><a href="ovpn/04-JP-219.100.37.182.ovpn">直连</a> · <a href="ovpn-chain/04-JP-219.100.37.182.ovpn">链式</a></td></tr>
-<tr><td>5</td><td>JP Japan</td><td>118.240.129.23</td><td>502.9 Mbps</td><td>2 ms</td><td>181 ms</td><td><a href="ovpn/05-JP-118.240.129.23.ovpn">直连</a> · <a href="ovpn-chain/05-JP-118.240.129.23.ovpn">链式</a></td></tr>
-<tr><td>6</td><td>JP Japan</td><td>219.100.37.1</td><td>602.2 Mbps</td><td>8 ms</td><td>177 ms</td><td><a href="ovpn/06-JP-219.100.37.1.ovpn">直连</a> · <a href="ovpn-chain/06-JP-219.100.37.1.ovpn">链式</a></td></tr>
-<tr><td>7</td><td>JP Japan</td><td>219.100.37.180</td><td>438.9 Mbps</td><td>10 ms</td><td>177 ms</td><td><a href="ovpn/07-JP-219.100.37.180.ovpn">直连</a> · <a href="ovpn-chain/07-JP-219.100.37.180.ovpn">链式</a></td></tr>
-<tr><td>8</td><td>JP Japan</td><td>219.100.37.183</td><td>251.2 Mbps</td><td>11 ms</td><td>176 ms</td><td><a href="ovpn/08-JP-219.100.37.183.ovpn">直连</a> · <a href="ovpn-chain/08-JP-219.100.37.183.ovpn">链式</a></td></tr>
-<tr><td>9</td><td>JP Japan</td><td>219.100.37.9</td><td>149.4 Mbps</td><td>20 ms</td><td>167 ms</td><td><a href="ovpn/09-JP-219.100.37.9.ovpn">直连</a> · <a href="ovpn-chain/09-JP-219.100.37.9.ovpn">链式</a></td></tr>
-<tr><td>10</td><td>JP Japan</td><td>219.100.37.161</td><td>200.0 Mbps</td><td>9 ms</td><td>179 ms</td><td><a href="ovpn/10-JP-219.100.37.161.ovpn">直连</a> · <a href="ovpn-chain/10-JP-219.100.37.161.ovpn">链式</a></td></tr>
-<tr><td>11</td><td>JP Japan</td><td>219.100.37.225</td><td>131.7 Mbps</td><td>18 ms</td><td>172 ms</td><td><a href="ovpn/11-JP-219.100.37.225.ovpn">直连</a> · <a href="ovpn-chain/11-JP-219.100.37.225.ovpn">链式</a></td></tr>
-<tr><td>12</td><td>JP Japan</td><td>219.100.37.85</td><td>436.9 Mbps</td><td>10 ms</td><td>181 ms</td><td><a href="ovpn/12-JP-219.100.37.85.ovpn">直连</a> · <a href="ovpn-chain/12-JP-219.100.37.85.ovpn">链式</a></td></tr>
+<tr><td>1</td><td>JP Japan</td><td>219.100.37.8</td><td>215.6 Mbps</td><td>10 ms</td><td>88 ms</td><td><a href="ovpn/01-JP-219.100.37.8.ovpn">直连</a> · <a href="ovpn-chain/01-JP-219.100.37.8.ovpn">链式</a></td></tr>
+<tr><td>2</td><td>JP Japan</td><td>219.100.37.52</td><td>237.3 Mbps</td><td>12 ms</td><td>90 ms</td><td><a href="ovpn/02-JP-219.100.37.52.ovpn">直连</a> · <a href="ovpn-chain/02-JP-219.100.37.52.ovpn">链式</a></td></tr>
+<tr><td>3</td><td>JP Japan</td><td>219.100.37.202</td><td>158.7 Mbps</td><td>8 ms</td><td>96 ms</td><td><a href="ovpn/03-JP-219.100.37.202.ovpn">直连</a> · <a href="ovpn-chain/03-JP-219.100.37.202.ovpn">链式</a></td></tr>
+<tr><td>4</td><td>JP Japan</td><td>219.100.37.30</td><td>166.6 Mbps</td><td>11 ms</td><td>95 ms</td><td><a href="ovpn/04-JP-219.100.37.30.ovpn">直连</a> · <a href="ovpn-chain/04-JP-219.100.37.30.ovpn">链式</a></td></tr>
+<tr><td>5</td><td>JP Japan</td><td>116.220.123.35</td><td>119.6 Mbps</td><td>11 ms</td><td>97 ms</td><td><a href="ovpn/05-JP-116.220.123.35.ovpn">直连</a> · <a href="ovpn-chain/05-JP-116.220.123.35.ovpn">链式</a></td></tr>
+<tr><td>6</td><td>JP Japan</td><td>219.100.37.12</td><td>223.1 Mbps</td><td>22 ms</td><td>90 ms</td><td><a href="ovpn/06-JP-219.100.37.12.ovpn">直连</a> · <a href="ovpn-chain/06-JP-219.100.37.12.ovpn">链式</a></td></tr>
+<tr><td>7</td><td>JP Japan</td><td>219.100.37.205</td><td>375.1 Mbps</td><td>8 ms</td><td>106 ms</td><td><a href="ovpn/07-JP-219.100.37.205.ovpn">直连</a> · <a href="ovpn-chain/07-JP-219.100.37.205.ovpn">链式</a></td></tr>
+<tr><td>8</td><td>JP Japan</td><td>219.100.37.104</td><td>178.1 Mbps</td><td>12 ms</td><td>106 ms</td><td><a href="ovpn/08-JP-219.100.37.104.ovpn">直连</a> · <a href="ovpn-chain/08-JP-219.100.37.104.ovpn">链式</a></td></tr>
+<tr><td>9</td><td>JP Japan</td><td>219.100.37.106</td><td>152.9 Mbps</td><td>14 ms</td><td>105 ms</td><td><a href="ovpn/09-JP-219.100.37.106.ovpn">直连</a> · <a href="ovpn-chain/09-JP-219.100.37.106.ovpn">链式</a></td></tr>
+<tr><td>10</td><td>JP Japan</td><td>219.100.37.166</td><td>223.5 Mbps</td><td>14 ms</td><td>106 ms</td><td><a href="ovpn/10-JP-219.100.37.166.ovpn">直连</a> · <a href="ovpn-chain/10-JP-219.100.37.166.ovpn">链式</a></td></tr>
+<tr><td>11</td><td>JP Japan</td><td>126.59.87.181</td><td>193.7 Mbps</td><td>6 ms</td><td>114 ms</td><td><a href="ovpn/11-JP-126.59.87.181.ovpn">直连</a> · <a href="ovpn-chain/11-JP-126.59.87.181.ovpn">链式</a></td></tr>
+<tr><td>12</td><td>JP Japan</td><td>219.100.37.61</td><td>179.2 Mbps</td><td>9 ms</td><td>112 ms</td><td><a href="ovpn/12-JP-219.100.37.61.ovpn">直连</a> · <a href="ovpn-chain/12-JP-219.100.37.61.ovpn">链式</a></td></tr>
 </table>
 </body></html>
