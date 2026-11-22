@@ -3,9 +3,9 @@
   "remark": "JP-jiakuan-laud",
   "sstp_host": "laud.opengw.net",
   "country": "Japan",
-  "exit_ip": "187.15.136.110",
+  "exit_ip": "187.15.134.162",
   "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 2704,
-  "verified_at": "2026-11-22 08:31 UTC"
+  "chain_ms": 3064,
+  "verified_at": "2026-11-22 16:34 UTC"
  }
 ]
