@@ -1,11 +1,11 @@
 [
  {
-  "remark": "HR-jiakuan-vpn457795651",
-  "sstp_host": "vpn457795651.opengw.net",
+  "remark": "HR-jiakuan-vpn648581557",
+  "sstp_host": "vpn648581557.opengw.net",
   "country": "Croatia (LOCAL Name: Hrvatska)",
-  "exit_ip": "150.40.105.20",
+  "exit_ip": "150.40.105.5",
   "exit_isp": "MAXKO d.o.o.",
-  "chain_ms": 2696,
-  "verified_at": "2026-11-24 18:35 UTC"
+  "chain_ms": 2735,
+  "verified_at": "2026-11-25 02:49 UTC"
  }
 ]
