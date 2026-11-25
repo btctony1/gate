@@ -1,112 +1,122 @@
 [
  {
-  "remark": "US-jiakuan-76.93.210.116",
-  "remote_host": "76.93.210.116",
-  "remote_port": 1446,
-  "country": "United States",
-  "exit_ip": "76.93.210.116",
-  "exit_isp": "Charter Communications",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "01-US-76.93.210.116.ovpn"
+  "remark": "JP-jiakuan-118.240.129.23",
+  "remote_host": "118.240.129.23",
+  "remote_port": 1606,
+  "country": "Japan",
+  "exit_ip": "118.240.129.23",
+  "exit_isp": "Sony Network Communications Inc",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "01-JP-118.240.129.23.ovpn"
  },
  {
-  "remark": "KR-jiakuan-112.171.48.98",
-  "remote_host": "112.171.48.98",
-  "remote_port": 1214,
+  "remark": "JP-jiakuan-221.245.60.19",
+  "remote_host": "221.245.60.19",
+  "remote_port": 1599,
+  "country": "Japan",
+  "exit_ip": "221.245.60.19",
+  "exit_isp": "UCOM Corp.",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "02-JP-221.245.60.19.ovpn"
+ },
+ {
+  "remark": "JP-jiakuan-59.129.41.98",
+  "remote_host": "59.129.41.98",
+  "remote_port": 1472,
+  "country": "Japan",
+  "exit_ip": "59.129.41.98",
+  "exit_isp": "Kddi Corporation",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "03-JP-59.129.41.98.ovpn"
+ },
+ {
+  "remark": "JP-jiakuan-180.1.215.15",
+  "remote_host": "180.1.215.15",
+  "remote_port": 1665,
+  "country": "Japan",
+  "exit_ip": "180.1.215.15",
+  "exit_isp": "NTT Communications Corporation",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "04-JP-180.1.215.15.ovpn"
+ },
+ {
+  "remark": "JP-jiakuan-175.129.117.170",
+  "remote_host": "175.129.117.170",
+  "remote_port": 1213,
+  "country": "Japan",
+  "exit_ip": "175.129.117.170",
+  "exit_isp": "Kddi Corporation",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "05-JP-175.129.117.170.ovpn"
+ },
+ {
+  "remark": "KR-jiakuan-112.171.219.54",
+  "remote_host": "112.171.219.54",
+  "remote_port": 995,
   "country": "Korea Republic of",
-  "exit_ip": "112.171.48.98",
+  "exit_ip": "119.196.186.220",
   "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "02-KR-112.171.48.98.ovpn"
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "06-KR-112.171.219.54.ovpn"
  },
  {
-  "remark": "KR-jiakuan-110.34.117.55",
-  "remote_host": "110.34.117.55",
-  "remote_port": 1511,
+  "remark": "KR-jiakuan-1.230.209.219",
+  "remote_host": "1.230.209.219",
+  "remote_port": 995,
   "country": "Korea Republic of",
-  "exit_ip": "110.34.117.55",
-  "exit_isp": "CMB DONDAEMOON BROADCASTING",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "03-KR-110.34.117.55.ovpn"
- },
- {
-  "remark": "KR-jiakuan-121.66.55.168",
-  "remote_host": "121.66.55.168",
-  "remote_port": 1990,
-  "country": "Korea Republic of",
-  "exit_ip": "121.66.55.168",
-  "exit_isp": "LG DACOM Corporation",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "04-KR-121.66.55.168.ovpn"
- },
- {
-  "remark": "KR-jiakuan-115.20.158.194",
-  "remote_host": "115.20.158.194",
-  "remote_port": 1979,
-  "country": "Korea Republic of",
-  "exit_ip": "115.20.158.194",
-  "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "05-KR-115.20.158.194.ovpn"
- },
- {
-  "remark": "KR-jiakuan-58.238.15.111",
-  "remote_host": "58.238.15.111",
-  "remote_port": 1640,
-  "country": "Korea Republic of",
-  "exit_ip": "58.238.15.111",
+  "exit_ip": "1.236.250.72",
   "exit_isp": "SK Broadband Co Ltd",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "06-KR-58.238.15.111.ovpn"
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "07-KR-1.230.209.219.ovpn"
  },
  {
-  "remark": "KR-jiakuan-115.0.31.140",
-  "remote_host": "115.0.31.140",
-  "remote_port": 1781,
+  "remark": "KR-jiakuan-211.185.182.197",
+  "remote_host": "211.185.182.197",
+  "remote_port": 1710,
   "country": "Korea Republic of",
-  "exit_ip": "175.193.223.25",
+  "exit_ip": "211.185.182.197",
   "exit_isp": "Korea Telecom",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "07-KR-115.0.31.140.ovpn"
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "08-KR-211.185.182.197.ovpn"
  },
  {
-  "remark": "RU-jiakuan-87.225.120.181",
-  "remote_host": "87.225.120.181",
-  "remote_port": 1563,
-  "country": "Russian Federation",
-  "exit_ip": "87.225.120.181",
-  "exit_isp": "Rostelecom Nets",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "08-RU-87.225.120.181.ovpn"
+  "remark": "JP-jiakuan-113.154.3.100",
+  "remote_host": "113.154.3.100",
+  "remote_port": 1754,
+  "country": "Japan",
+  "exit_ip": "113.154.3.100",
+  "exit_isp": "DION (KDDI CORPORATION)",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "09-JP-113.154.3.100.ovpn"
  },
  {
-  "remark": "TH-jiakuan-223.204.49.162",
-  "remote_host": "223.204.49.162",
-  "remote_port": 1397,
-  "country": "Thailand",
-  "exit_ip": "223.204.49.162",
-  "exit_isp": "Triple T Broadband Public Company Limited",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "09-TH-223.204.49.162.ovpn"
+  "remark": "JP-jiakuan-113.154.67.10",
+  "remote_host": "113.154.67.10",
+  "remote_port": 1944,
+  "country": "Japan",
+  "exit_ip": "113.154.67.10",
+  "exit_isp": "DION (KDDI CORPORATION)",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "10-JP-113.154.67.10.ovpn"
  },
  {
-  "remark": "RU-jiakuan-176.197.76.130",
-  "remote_host": "176.197.76.130",
-  "remote_port": 1254,
-  "country": "Russian Federation",
-  "exit_ip": "176.197.76.130",
-  "exit_isp": "Goodline.info",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "10-RU-176.197.76.130.ovpn"
+  "remark": "KR-jiakuan-220.92.53.186",
+  "remote_host": "220.92.53.186",
+  "remote_port": 1288,
+  "country": "Korea Republic of",
+  "exit_ip": "220.92.53.186",
+  "exit_isp": "Korea Telecom",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "11-KR-220.92.53.186.ovpn"
  },
  {
-  "remark": "RU-jiakuan-176.123.202.78",
-  "remote_host": "176.123.202.78",
-  "remote_port": 1731,
-  "country": "Russian Federation",
-  "exit_ip": "176.123.202.78",
-  "exit_isp": "Inter.Com Ltd",
-  "verified_at": "2026-11-25 02:49 UTC",
-  "file": "11-RU-176.123.202.78.ovpn"
+  "remark": "KR-jiakuan-121.139.53.139",
+  "remote_host": "121.139.53.139",
+  "remote_port": 995,
+  "country": "Korea Republic of",
+  "exit_ip": "121.139.54.121",
+  "exit_isp": "Korea Telecom",
+  "verified_at": "2026-11-25 11:59 UTC",
+  "file": "12-KR-121.139.53.139.ovpn"
  }
 ]
