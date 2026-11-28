@@ -3,18 +3,9 @@
   "remark": "JP-jiakuan-laud",
   "sstp_host": "laud.opengw.net",
   "country": "Japan",
-  "exit_ip": "187.15.136.110",
+  "exit_ip": "187.15.135.102",
   "exit_isp": "GSL Networks Pty LTD",
-  "chain_ms": 3230,
-  "verified_at": "2026-11-26 22:08 UTC"
- },
- {
-  "remark": "JP-jiakuan-vpn980909101",
-  "sstp_host": "vpn980909101.opengw.net",
-  "country": "Japan",
-  "exit_ip": "128.27.29.194",
-  "exit_isp": "OPTAGE Inc.",
-  "chain_ms": 4041,
-  "verified_at": "2026-11-26 22:08 UTC"
+  "chain_ms": 2722,
+  "verified_at": "2026-11-28 04:29 UTC"
  }
 ]
